@@ -6,10 +6,17 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.Joystick;
 
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import frc.robot.commands.CMG;
+import frc.robot.commands.Eatball;
+import frc.robot.commands.Shoot;
+
+import static frc.robot.Constants.SPEED.*;
+import static frc.robot.Constants.controller.*;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -18,10 +25,14 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
+  
+  public static final Joystick controller = new Joystick(1);
+  
+  public static final Intake m_intake = new Intake();
+  public static final Shooter m_shooter = new Shooter();
+  public static final Command m_eatball = new Eatball(m_intake, INTAKEV);
+  public static final Command m_shoot = new Shoot(m_shooter, SHOOTERV);
+  public static final Command m_auto = new CMG(m_shooter, m_intake);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -43,6 +54,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return m_auto;
   }
 }

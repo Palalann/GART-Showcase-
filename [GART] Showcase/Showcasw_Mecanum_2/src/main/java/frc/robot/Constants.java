@@ -19,6 +19,12 @@ public final class Constants {
         public static final int LBMOTOR = 3;
         public static final int RBMOTOR = 4;
 
+        public static final int INTAKE = 5;
+        public static final int SHOOTER = 6;
+    }
+    public static class SPEED{
+        public static final double SHOOTERV = 0.8;
+        public static final double INTAKEV = 0.8;
     }
     public static class controller{
         public static final int Sq = 1;

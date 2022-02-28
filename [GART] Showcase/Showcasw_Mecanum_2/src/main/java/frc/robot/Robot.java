@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.controller;
 
-import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import static frc.robot.Constants.MOTOR.*;
 import static frc.robot.Constants.controller.*;
@@ -24,7 +23,7 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
  */
 public class Robot extends TimedRobot {
   
-  public MecanumDrive meca;
+  //public MecanumDrive meca;
   public Joystick controller;
   
   private Command m_autonomousCommand;
@@ -39,7 +38,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+    /*m_robotContainer = new RobotContainer();
     WPI_TalonSRX leftFront = new WPI_TalonSRX(LFMOTOR);
     WPI_TalonSRX rightFront = new WPI_TalonSRX(RFMOTOR);
     WPI_TalonSRX leftBack = new WPI_TalonSRX(LBMOTOR);
@@ -53,7 +52,7 @@ public class Robot extends TimedRobot {
     controller = new Joystick(1);
 
     meca = new MecanumDrive(leftFront, leftBack , rightFront , leftBack);
-
+    */
   }
 
   /**
@@ -108,7 +107,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    meca.driveCartesian(controller.getX(), controller.getY(), controller.getZ());
+    //meca.driveCartesian(controller.getX(), controller.getY(), controller.getZ());
   }
 
   @Override
