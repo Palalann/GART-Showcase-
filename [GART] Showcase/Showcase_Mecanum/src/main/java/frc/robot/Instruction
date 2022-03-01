@@ -1,0 +1,6 @@
+Pose estimator là bản thử nghiệm. Cần điều chỉnh
+WPILIB có provide UKF nma ko dùng đc vì ko liên quan đến yêu cầu của mình
+Bọn m phần tích đoạn code xem ntn
+https://drive.google.com/file/d/0By_SW19c1BfhSVFzNHc0SjduNzg/view?resourcekey=0-41olC9ht9xE3wQe2zHZ45A
+https://file.tavsys.net/control/controls-engineering-in-frc.pdf
+Hai đường link chính giúp t hiểu phải vt code kiểu quần què gì
