@@ -19,13 +19,16 @@ public class PoseUKF {
     Translation2d m_backRight = new Translation2d(2,3);
     Translation2d m_backLeft = new Translation2d(2,3);
     
-    Matrix<N3,N1> state = new Matrix<>(Nat.N3(), Nat.N1());
+    Matrix<N3,N1> state = new Matrix<>(Nat.N3(), Nat.N1()); // for delta x, y
+    Matrix<N3,N1> prediction = new Matrix<>(Nat.N3(), Nat.N1()); // for future delta x,y
+    Matrix<N3,N1> beginning_position = new Matrix<>(Nat.N3(), Nat.N1()); // our beginning position
+    Matrix<N3,N1> current_position = new Matrix<>(Nat.N3(), Nat.N1()); // our later position
+
     Matrix<N3,N3> p_0 = new Matrix<>(Nat.N3(), Nat.N3());
-    Matrix<N3,N3> p_x = new Matrix<>(Nat.N3(), Nat.N3());
     Matrix<N3,N3> p_covariance = new Matrix<>(Nat.N3(), Nat.N3());
     Matrix<N3,N3> p_z = new Matrix<>(Nat.N3(), Nat.N3());
     Matrix<N3,N3> p_xz = new Matrix<>(Nat.N3(), Nat.N3());
-    Matrix<N3,N1> prediction = new Matrix<>(Nat.N3(), Nat.N1());
+    
 
     Matrix<N3,N1> measurement_matrix = new Matrix<>(Nat.N3(), Nat.N1());
     Matrix<N3,N3> h_function = new Matrix<>(Nat.N3(), Nat.N3());
@@ -58,17 +61,12 @@ public class PoseUKF {
     }
 
     // Pre-calculation
-    public double convertWheeltoSpeed(double wheel_speeds) {
+    public double convertWheeltoSpeed(double wheel_speeds) { // wheel speeds is the linear velocity of wheel in robot frame
         return wheel_speeds/Math.sin(Math.PI/4);
     }
 
-    public MecanumDriveWheelSpeeds convertWheelSpeeds() {
-        return new MecanumDriveWheelSpeeds(convertWheeltoSpeed(1), 
-        convertWheeltoSpeed(1), convertWheeltoSpeed(1), convertWheeltoSpeed(1));
-    }
-
-    public ChassisSpeeds convertMotortoRobotframe() {
-        return kinematics.toChassisSpeeds(convertWheelSpeeds());
+    public void convertMotortoRobotframe(double v_1, double v_2, double v_3, double v_4) {
+        chassisSpeeds = kinematics.toChassisSpeeds(new MecanumDriveWheelSpeeds(v_1, v_2, v_3, v_4));
     }
 
     public double robotFrameVx() {
@@ -149,7 +147,8 @@ public class PoseUKF {
     // Design the sigma point
     public Matrix<N3,N1> designPredictY(int y) {
         Matrix<N3,N1> matrix = new Matrix<>(Nat.N3(), Nat.N1());
-        matrix = desighCosMatrix(calculateCol(y).get(2, 0)).times(designCosTMatrix()).times(designControlinput());
+        matrix = desighCosMatrix(calculateCol(y).get(2, 0)).times(
+        designCosTMatrix()).times(designControlinput());
         return matrix;
     }
 
@@ -179,13 +178,14 @@ public class PoseUKF {
     }
 
     // Update
-    public void designHfunction() {
+    public void calculateHfunction() {
         h_function.set(0,0,1);
         h_function.set(1,1,1);
         h_function.set(2,2,1);
     }
 
     public Matrix<N3,N1> calculateZMatrix(int y) {
+        calculateHfunction();
         Matrix<N3,N1> matrix = new Matrix<>(Nat.N3(), Nat.N1());
         matrix = h_function.times(designPredictY(y));
         return matrix;
@@ -226,9 +226,30 @@ public class PoseUKF {
         var k_gain = p_xz.times(p_z.transpose());
         var y = measurement_matrix.minus(calculateMeanz());
         
-        prediction = state.plus(k_gain.times(y));
-        p_covariance = p_x.minus(k_gain.times(p_z).times(k_gain.transpose()));
+        prediction = state.plus(state.plus(k_gain.times(y)));
+        p_covariance = p_0.minus(k_gain.times(p_z).times(k_gain.transpose()));
         return new Pair<>(prediction, p_covariance);
     }
+
+    public void calculatePose() {
+        current_position = beginning_position.plus(prediction);
+    }
+
+    public void update() {
+        state = prediction;
+        p_0 = p_covariance;
+        beginning_position = current_position;
+    }
+
+/* Demo program
+    PoseUKF pose = new PoseUKF(parameter);
+    if(time.elapsed(2)) {
+        pose.convertMotortoRobotframe(pose.convertWheeltoSpeeds(1), pose.convertWheeltoSpeeds(2),...);
+        pose.collectmeasurement(x,y,theta);
+        Pair<x,y> pair = pose.calculate();
+        pose.calculatePose();
+        pose.update();
+    }
+*/
 }
 
