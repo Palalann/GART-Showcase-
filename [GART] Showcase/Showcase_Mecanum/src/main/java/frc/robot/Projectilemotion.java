@@ -1,19 +1,11 @@
 package frc.robot;
 
+import static frc.robot.Constants.FIELD_DATA.*;
 public class Projectilemotion { 
-    // Program for calculate the initial velocity of the motor to reach the target
-    double g = 9.81; // gravity acceleration
-    double drag_coefficient = 0.15;
-    double radius = 2;
-    double mass = 1;
-    double air_density = 1206.17; //kg/m^3
-    double cross_section_area = Math.pow(radius,2)*Math.PI;
-    double vt = Math.sqrt(2*mass*g/ 
-    (drag_coefficient*cross_section_area*air_density)); // terminal velocity
-    double target_height = 2;
-    double tolerance = 0.03;
-
+    /* ___Program for calculate the initial velocity of the motor to reach the target___ */
+    
     public double calculateInitVelocity(double distance, double r, double m_w_ratio) {
+        // r is the radius of the shooter's wheel
         double sqrt = Math.pow(vt, 2);
         double v_0 = sqrt*(Math.pow(Math.E, 2*g*target_height/sqrt)-1);
         double u_0 = vt/Math.atan(v_0/vt)*(Math.pow(Math.E, g*distance/sqrt)-1);

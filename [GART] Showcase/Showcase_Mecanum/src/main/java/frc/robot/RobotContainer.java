@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -34,6 +36,8 @@ public class RobotContainer {
   public final static Joystick rightJoystick = new Joystick(1);
   public final static JoystickButton shootButton = new JoystickButton(rightJoystick, 0);
   public final static JoystickButton feedButton = new JoystickButton(rightJoystick, 1);
+  
+  public final static PhotonCamera photon_camera = new PhotonCamera("name of the camera");
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings

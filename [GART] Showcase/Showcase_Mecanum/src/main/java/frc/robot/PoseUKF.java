@@ -7,17 +7,12 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.StateSpaceUtil;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.estimator.MerweScaledSigmaPoints;
+import static frc.robot.Constants.ROBOT_DATA.*;
 
 public class PoseUKF {
     ChassisSpeeds chassisSpeeds;
-    
-    Translation2d m_frontLeft = new Translation2d(2,3);
-    Translation2d m_frontRight = new Translation2d(2,3);
-    Translation2d m_backRight = new Translation2d(2,3);
-    Translation2d m_backLeft = new Translation2d(2,3);
     
     Matrix<N3,N1> state = new Matrix<>(Nat.N3(), Nat.N1()); // for delta x, y
     Matrix<N3,N1> prediction = new Matrix<>(Nat.N3(), Nat.N1()); // for future delta x,y
