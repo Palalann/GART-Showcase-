@@ -62,6 +62,8 @@ public final class Constants {
         public static final double vt = Math.sqrt(2*mass*g/ 
         (drag_coefficient*cross_section_area*air_density)); // terminal velocity
         public static final double tolerance = 0.03;        // tolerance of the velocity of the shooter
+        public static final double sqrt = Math.pow(vt, 2);  // Some constants
+        public static final double alpha = Math.pow(vt,2)/g;
     }
 
     public static class ROBOT_DATA {
