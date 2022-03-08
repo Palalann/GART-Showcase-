@@ -16,8 +16,8 @@ public class PoseUKF {
     
     Matrix<N3,N1> state = new Matrix<>(Nat.N3(), Nat.N1()); // for delta x, y
     Matrix<N3,N1> prediction = new Matrix<>(Nat.N3(), Nat.N1()); // for future delta x,y
-    Matrix<N3,N1> beginning_position = new Matrix<>(Nat.N3(), Nat.N1()); // our beginning position
-    Matrix<N3,N1> current_position = new Matrix<>(Nat.N3(), Nat.N1()); // our later position
+    //Matrix<N3,N1> beginning_position = new Matrix<>(Nat.N3(), Nat.N1()); // our beginning position
+    //Matrix<N3,N1> current_position = new Matrix<>(Nat.N3(), Nat.N1()); // our later position
 
     Matrix<N3,N3> p_0 = new Matrix<>(Nat.N3(), Nat.N3());
     Matrix<N3,N3> p_covariance = new Matrix<>(Nat.N3(), Nat.N3());
@@ -142,13 +142,14 @@ public class PoseUKF {
     // Design the sigma point
     public Matrix<N3,N1> designPredictY(int y) {
         Matrix<N3,N1> matrix = new Matrix<>(Nat.N3(), Nat.N1());
-        matrix = desighCosMatrix(calculateCol(y).get(2, 0)).times(
-        designCosTMatrix()).times(designControlinput());
+        matrix = (desighCosMatrix(calculateCol(y).get(2, 0)).times(
+        designCosTMatrix()).times(designControlinput()));
+        matrix = calculateCol(y).plus(matrix);
         return matrix;
     }
 
-    public Matrix<N3,?> calculateCol(int y) {
-        Matrix<N3,?> x = new Matrix<>(Nat.N3(), Nat.N1());
+    public Matrix<N3,N1> calculateCol(int y) {
+        Matrix<N3,N1> x = new Matrix<>(Nat.N3(), Nat.N1());
         for (int i = 0; i<x.getNumRows(); i++){
            x.set(i, 0, calculateSigmaPoint().get(i, y));
         }
@@ -221,19 +222,19 @@ public class PoseUKF {
         var k_gain = p_xz.times(p_z.transpose());
         var y = measurement_matrix.minus(calculateMeanz());
         
-        prediction = state.plus(state.plus(k_gain.times(y)));
+        prediction = state.plus(k_gain.times(y));
         p_covariance = p_0.minus(k_gain.times(p_z).times(k_gain.transpose()));
         return new Pair<>(prediction, p_covariance);
     }
 
-    public void calculatePose() {
-        current_position = beginning_position.plus(prediction);
-    }
+    //public void calculatePose() {
+    //   current_position = beginning_position.plus(prediction);
+    //}
 
     public void update() {
         state = prediction;
         p_0 = p_covariance;
-        beginning_position = current_position;
+        //beginning_position = current_position;
     }
 
 /* Demo program
@@ -242,7 +243,6 @@ public class PoseUKF {
         pose.convertMotortoRobotframe(pose.convertWheeltoSpeeds(1), pose.convertWheeltoSpeeds(2),...);
         pose.collectmeasurement(x,y,theta);
         Pair<x,y> pair = pose.calculate();
-        pose.calculatePose();
         pose.update();
     }
 */
