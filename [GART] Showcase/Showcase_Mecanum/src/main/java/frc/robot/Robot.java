@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     // TalonSRX velocity
-    if(forwardSwitch.get()) {
+    if (forwardSwitch.get()) {
       //velocity.setInverted();
     }
     else if(reverseSwitch.get()) {

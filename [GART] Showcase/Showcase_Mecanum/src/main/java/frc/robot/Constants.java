@@ -84,5 +84,6 @@ public final class Constants {
     public static class SHOOTER_CONSTANTS {
         public static final double angular_kp = 0.5;
         public static final double angular_kd = 0.6;
+        public static final double const_delta = 1; // angle in radian
     }
 }

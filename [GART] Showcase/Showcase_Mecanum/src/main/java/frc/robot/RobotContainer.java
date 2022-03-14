@@ -5,13 +5,11 @@
 package frc.robot;
 
 import org.photonvision.PhotonCamera;
-
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivebase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -24,11 +22,10 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  public final Drivebase db = new Drivebase();
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-  public static Joystick controller = new Joystick(1);
+  public  final Drivebase db = new Drivebase();
   
+  public static Joystick controller = new Joystick(1);
+  public static WPI_TalonSRX turret = new WPI_TalonSRX(1);
 
   public final static Joystick leftJoystick = new Joystick(0);
   public final static JoystickButton autoAimButton = new JoystickButton(leftJoystick, 0);
@@ -62,6 +59,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return null;
   }
 }

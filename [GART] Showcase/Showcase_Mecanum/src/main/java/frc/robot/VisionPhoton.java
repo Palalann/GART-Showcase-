@@ -12,11 +12,11 @@ import edu.wpi.first.math.geometry.Transform2d;
 import static frc.robot.Constants.SHOOTER_CONSTANTS.*;
 import static frc.robot.Constants.CAMERA_DATA.*;
 
-public class Vision {
+public class VisionPhoton {
     PhotonCamera camera;    
     PIDController turn_Controller = new PIDController(angular_kp, 0, angular_kd);
 
-    public Vision(PhotonCamera photonCamera) {
+    public VisionPhoton(PhotonCamera photonCamera) {
         turn_Controller.setTolerance(0.08);
         turn_Controller.setIntegratorRange(0, 2*Math.PI);
         camera = photonCamera;
@@ -57,21 +57,8 @@ public class Vision {
     }
     */
 
-    public double rotateTurret(PhotonPipelineResult result) {
-        double velocity = turn_Controller.calculate(-result.getBestTarget().getYaw(), 0);
+    public double rotateTurret(double alpha) {
+        double velocity = turn_Controller.calculate(alpha, 0);
         return velocity;
     }
-
-    /*
-    ________Demo program for spinning______ 
-    if(time.hasElasped(dt)) {
-        PhotonPipeLineResult result = camera.getLatestResult();
-        if(result.hasTarget()) {
-            RobotContainer.rotate_wheel.set(rotateTurret(result));
-        }
-        else {
-            RobotContainer.rotate_wheel.set(0);
-        }
-    }
-    */
 }
